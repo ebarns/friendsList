@@ -1,5 +1,8 @@
-.App {
-  text-align: center;
+body{
+  background-color: rgb(33, 34, 35);
+  color: white;
+  font-family: 'Arimo', sans-serif;
+  padding: 1rem;
 }
 
 .App-logo {
@@ -27,9 +30,11 @@
   to { transform: rotate(360deg); }
 }
 
-
-div, button {
-  margin: 10px;
+.header{
+  border-bottom: 0.5px solid white;
+  display:flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
 }
 
 input,  button{
@@ -46,11 +51,69 @@ input,  button{
 .flex-div{
   display:flex;
 }
-
-td{
+table{margin:auto;}
+table tr td, th{
     text-align: left;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+}
+tr{
+    border-bottom: 1px solid white;
 }
 
 .active-track td{ 
-  color: #00ff00;
+  color: #1db954;
  }
+ .active-track td:hover{ 
+  color: #15843c;
+ }
+
+ .user-id-input-container div{ margin-right: 1rem; }
+ .get-user-id-container, .created-container{
+  border: 3px solid white;
+  border-radius: 2rem;
+  padding: 1rem;
+  max-width: 70%;
+  width:100%;
+  margin:auto;
+}
+ .get-user-id-container div {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+ }
+
+input {
+  background: transparent;
+  color: white;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.instructions{
+  font-size: 1.5rem;
+}
+
+.button{
+  cursor: pointer;
+  width: fit-content;
+  padding: 0.25rem 0;
+}
+
+.button:hover{
+  border-bottom: 1px solid white;
+}
+
+.text-with-arrow svg{
+  margin-left: 1rem;
+}
+
+.right-aligned-content{
+  display:flex;
+  justify-content: flex-end;
+}
+.right-arrow-icon{
+    width: 2rem;
+    height: 2rem;
+    fill: white;
+}
+
