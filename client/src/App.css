@@ -1,119 +1,152 @@
-body{
-  background-color: rgb(33, 34, 35);
+/**
+ * Foundation for Sites by ZURB
+ * Version 6.4.4-rc1
+ * foundation.zurb.com
+ * Licensed under MIT Open Source
+ */
+body {
+  background-color: #212223;
   color: white;
-  font-family: 'Arimo', sans-serif;
-  padding: 1rem;
-}
+  font-family: 'Arimo', sans-serif; }
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
+  height: 80px; }
 
 .App-header {
   background-color: #222;
   height: 150px;
   padding: 20px;
-  color: white;
-}
+  color: white; }
 
 .App-title {
-  font-size: 1.5em;
-}
+  font-size: 1.5em; }
 
 .App-intro {
-  font-size: large;
-}
+  font-size: large; }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
 
-.header{
+.header {
   border-bottom: 0.5px solid white;
-  display:flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-}
+  display: flex;
+  justify-content: space-between; }
 
-input,  button{
+.header h1, h4 {
+  padding: 0 1rem; }
+
+.body-content {
+  padding: 2rem; }
+
+input {
+  width: 100%;
+  max-width: 10rem;
+  min-width: 3rem; }
+
+button {
   width: fit-content;
   padding: 0.5rem 1rem;
-  min-width:5rem;
-}
+  min-width: 5rem; }
 
-.flex-div-center{
-  display:flex;
-  align-items: center;
-}
+.flex-div-center {
+  display: flex;
+  align-items: center; }
 
-.flex-div{
-  display:flex;
-}
-table{margin:auto;}
-table tr td, th{
-    text-align: left;
-    padding-bottom: 0.5rem;
-    padding-top: 0.5rem;
-}
-tr{
-    border-bottom: 1px solid white;
-}
+.flex-div {
+  display: flex; }
 
-.active-track td{ 
-  color: #1db954;
- }
- .active-track td:hover{ 
-  color: #15843c;
- }
+table {
+  margin: auto; }
 
- .user-id-input-container div{ margin-right: 1rem; }
- .get-user-id-container, .created-container{
+table tr td, th {
+  text-align: left;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem; }
+
+tr {
+  border-bottom: 1px solid white; }
+
+.active-track td {
+  color: #1db954; }
+
+.active-track td:hover {
+  color: #15843c; }
+
+.user-id-input-container {
+  min-height: 5rem;
+  flex-wrap: wrap; }
+
+.get-user-id-container, .created-container {
   border: 3px solid white;
   border-radius: 2rem;
-  padding: 1rem;
+  padding: 2rem;
   max-width: 70%;
-  width:100%;
-  margin:auto;
-}
- .get-user-id-container div {
+  width: 100%;
+  margin: auto; }
+
+.get-user-id-container div {
   margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
- }
+  margin-bottom: 0.5rem; }
 
 input {
   background: transparent;
   color: white;
   padding: 0.5rem;
   font-size: 1rem;
-}
+  margin: 0 1rem; }
 
-.instructions{
-  font-size: 1.5rem;
-}
+input:focus {
+  outline: none !important;
+  border: 2px solid #1db954;
+  box-shadow: 0 0 5px #1db954; }
 
-.button{
+.instructions {
+  font-size: 1.5rem; }
+
+.button {
   cursor: pointer;
   width: fit-content;
   padding: 0.25rem 0;
-}
+  user-select: none; }
 
-.button:hover{
-  border-bottom: 1px solid white;
-}
+.button:hover {
+  color: #1db954; }
 
-.text-with-arrow svg{
-  margin-left: 1rem;
-}
+.plus-button {
+  font-size: 2rem; }
 
-.right-aligned-content{
-  display:flex;
-  justify-content: flex-end;
-}
-.right-arrow-icon{
-    width: 2rem;
-    height: 2rem;
-    fill: white;
-}
+.text-with-arrow svg {
+  margin-left: 1rem; }
 
+.right-aligned-content {
+  display: flex;
+  justify-content: flex-end; }
+
+.right-arrow-icon {
+  width: 2rem;
+  height: 2rem;
+  fill: white; }
+
+.right-arrow-icon:hover {
+  fill: #1db954; }
+
+.user-name-tile {
+  border: 1px white solid;
+  border-radius: 2rem;
+  padding: 0.5rem 1rem;
+  min-width: 5rem;
+  text-align: center; }
+
+.hover-item, .no-select {
+  user-select: none; }
+
+.hover-item:hover {
+  border-color: #1db954;
+  box-shadow: 0 0 2px #1db954; }
+
+.cursor-pointer {
+  cursor: pointer; }

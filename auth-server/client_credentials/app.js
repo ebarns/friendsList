@@ -6,11 +6,11 @@
  * For more information, read
  * https://developer.spotify.com/web-api/authorization-guide/#client_credentials_flow
  */
-
+var dotenv = require('dotenv').load();
 var request = require('request'); // "Request" library
 
-var client_id = '56477a90cfa443eea4531564ed615908'; // Your client id
-var client_secret = 'fa33d3ac14f8401a96e88db6c34592c8'; // Your secret
+var client_id = process.env.CLIENT_ID; // Your client id
+var client_secret = process.env.CLIENT_SECRET; // Your secret
 
 // your application requests authorization
 var authOptions = {

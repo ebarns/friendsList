@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import './App.css';
 import RightArrow from "./right-arrow.js";
 import SpotifyWebApi from 'spotify-web-api-js';
+import Header from "./components/header.js";
+import TrackList from "./components/trackList.js";
+
 const spotifyApi = new SpotifyWebApi();
 
 class App extends Component {
@@ -28,9 +31,9 @@ class App extends Component {
             trackLimit: 20,
             userFlowStep: 1
         }
-        this.pushTrackToTop = this.pushTrackToTop.bind(this);
         this.renderFlow = this.renderFlow.bind(this);
     }
+
     getHashParams() {
         var hashParams = {};
         var e;
@@ -79,13 +82,13 @@ class App extends Component {
             .then(response => {
                 console.warn(response);
                 //ascending
-                let sortType = this.state.selectedSort;
-                let tracks = this.state.tracks.sort(function(a, b) {
-                    return a.track[sortType] - b.track[sortType];
-                });
-                console.warn(tracks);
-                let trackUris = tracks.map(item => item.track.uri).slice(0, this.state.trackLimit);
-                spotifyApi.addTracksToPlaylist("erik.barns", response.id, trackUris)
+                // let sortType = this.state.selectedSort;
+                // let tracks = this.state.tracks.sort(function(a, b) {
+                //     return a.track[sortType] - b.track[sortType];
+                // });
+                // console.warn(tracks);
+                // let trackUris = tracks.map(item => item.track.uri).slice(0, this.state.trackLimit);
+                spotifyApi.addTracksToPlaylist("erik.barns", response.id, this.state.tracks)
             })
     }
 
@@ -147,115 +150,29 @@ class App extends Component {
         return array;
     }
 
-    getTracksFromUsers() {
-        console.log(this.state.userIds.split(" "));
-
-        this.state.spotifyUserIds.forEach(userId => {
-            spotifyApi.getUserPlaylists(userId)
-                .then((response) => {
-                    let playlists = response.items;
-                    console.log(playlists);
-                    playlists.forEach(playlist => {
-                        if (playlist.owner.id === userId) {
-                            spotifyApi.getPlaylist(userId, playlist.id)
-                                .then((response) => {
-                                    console.warn(response);
-                                    let tracks = response.tracks.items;
-                                    this.setState({
-                                        tracks: this.state.tracks.concat(tracks),
-                                        spotifyUserIds: []
-                                    })
-                                });
-                        }
-                    });
-                }).then(() => {
-                console.log("here");
-
-            });
-        });
-    }
-
-    removeTrack(index) {
-        let newData = this.state.tracks.slice() //copy array from prevState
-        newData.splice(index, 1) // remove element
-        this.setState({
-            tracks: newData
-        });
-    }
-
-    showAddOrRemove(index){
-        let td = (index < this.state.trackLimit) ? <td onClick={() => this.removeTrack(index)}>x</td> : <td onClick={() => this.pushTrackToTop(index)}>+</td>
-        return td;
-    }
-
-    renderTrackRow(track, index) {
-        let keys = Object.keys(track.track);
-        //    console.log(keys);
-        let t = track.track;
-        return (
-            <tr className={index < this.state.trackLimit ? "active-track" : "" }key={index}>
-            <td>{t.name}</td><td>{t.album.name}</td>{this.showAddOrRemove(index)}</tr>
-        )
-    }
-
-    renderTracks() {
-
-        return (
-            <div>
-            <div className="right-aligned-content">
-                <div className="text-with-arrow flex-div-center button" onClick={() => this.setState({userFlowStep: this.flowState.NAMEPLAYLIST})}>
-                      Create playlist <RightArrow/>
-                </div>
-            </div>
-            <table>
-            <thead>
-              <th>Song</th><th>Artist</th>
-            </thead>
-        <tbody>
-            {this.state.tracks.map((track, index) => this.renderTrackRow(track, index))}
-        </tbody>
-        </table>
-        </div>
-        )
-    }
-
-    pushTrackToTop(index) {
-        let track = this.state.tracks[index];
-        let tracks = this.state.tracks.slice()
-        tracks.splice(index, 1);
-        tracks.unshift(track);
-
-        this.setState({
-            tracks: tracks,
-            trackLimit: this.state.trackLimit + 1
-        });
-    }
-
     renderUserIdInput(){
         return(
             <div className="get-user-id-container">
                 <div className="instructions"><b>Step One:</b> Enter a Spotify user ID to pull songs from their library</div>
                 <div className="flex-div-center user-id-input-container">
                     <div>User ID:</div>
-                    <div>
                         <input  value={this.state.userIds} onChange={(event) => {
                             this.setState({
                                 userIds: event.target.value
                             })
                         }}/>
-                    </div>
-                    <div className="button" onClick={() => {
+                    <div className="button plus-button" onClick={() => {
                         this.setState({
                             spotifyUserIds: this.state.spotifyUserIds.concat(this.state.userIds),
                             userIds: ""
                         });
                     }}>
-                        Add
+                        +
                     </div>
                     <div className="flex-div-center">
                         {this.state.spotifyUserIds.map(user => {
                             return (
-                                        <div className={"added-user-id"}>
+                                        <div className={"added-user-id user-name-tile hover-item"}>
                                           {user}
                                         </div>
                                     )})
@@ -263,8 +180,7 @@ class App extends Component {
                     </div>
                 </div>
                 <div className="right-aligned-content">
-                    <div class="button done-button" onClick={()=> {
-                        this.getTracksFromUsers();
+                    <div className="button done-button" onClick={()=> {
                         this.setState({userFlowStep: this.flowState.TRACKLISTING})}}>
                         <RightArrow/>
                     </div>
@@ -300,7 +216,7 @@ class App extends Component {
 
     renderCreated(){
         return(
-            <div className="created-container">
+            <div className="created-container ">
                 <h4>{this.state.playlistname} was created successfully</h4>
                 <div className="button right-aligned-content flex-div-center text-with-arrow" onClick={()=>{this.setState({userFlowStep: this.flowState.GETUSERIDS})}}>Start over <RightArrow/></div>
             </div>
@@ -311,7 +227,7 @@ class App extends Component {
     renderFlow() {
         switch (this.state.userFlowStep) {
             case this.flowState.GETUSERIDS: return this.renderUserIdInput();
-            case this.flowState.TRACKLISTING: return this.renderTracks();
+            case this.flowState.TRACKLISTING: return <TrackList spotifyUserIds={this.state.spotifyUserIds} trackLimit={this.state.trackLimit} onClickCallback={(playlist)=>this.setState({userFlowStep: this.flowState.NAMEPLAYLIST, tracks: playlist})}/>
             case this.flowState.NAMEPLAYLIST: return this.renderNamePlaylist();
             case this.flowState.CREATED: return this.renderCreated();
             default: return;
@@ -322,11 +238,8 @@ class App extends Component {
         if (!this.state.loggedIn) return;
         return (
                 <div>
-                    <div className={"header flex-div-center"}>
-                        <h1>FriendsList</h1>
-                        <h4>Generate a playlist from any spotify users library</h4>
-                    </div>
-                    <div>
+                    <Header/>
+                    <div className="body-content">
                         {this.renderFlow()}
                     </div>
                 </div>
@@ -336,8 +249,8 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
-        {!this.state.loggedIn && <a href="http://localhost:8888" > Login to Spotify </a>}
+            <div className="App large-12 medium-12 small-12">
+        {!this.state.loggedIn && <a href="http://localhost:8888/login" > Login to Spotify </a>}
         {this.loginConditionalContent()}
       </div>
         );

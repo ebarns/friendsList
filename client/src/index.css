@@ -1,5 +1,10 @@
+/**
+ * Foundation for Sites by ZURB
+ * Version 6.4.4-rc1
+ * foundation.zurb.com
+ * Licensed under MIT Open Source
+ */
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
-}
+  font-family: sans-serif; }
