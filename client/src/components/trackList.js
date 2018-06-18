@@ -71,7 +71,7 @@ class TrackList extends Component {
         let t = track.track;
         return (
             <tr className={index < this.props.trackLimit ? "active-track" : "" }key={index}>
-            <td>{t.name}</td><td>{t.album.name}</td>{this.showAddOrRemove(index)}</tr>
+            <td>{t.name}</td><td>{t.album.artists.length > 0 ? t.album.artists[0].name : "NAME_MISSING"}</td>{this.showAddOrRemove(index)}</tr>
         )
     }
 

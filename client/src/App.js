@@ -153,33 +153,37 @@ class App extends Component {
     renderUserIdInput(){
         return(
             <div className="get-user-id-container">
-                <div className="instructions"><b>Step One:</b> Enter a Spotify user ID to pull songs from their library</div>
-                <div className="flex-div-center user-id-input-container">
-                    <div>User ID:</div>
-                        <input  value={this.state.userIds} onChange={(event) => {
-                            this.setState({
-                                userIds: event.target.value
-                            })
-                        }}/>
-                    <div className="button plus-button" onClick={() => {
-                        this.setState({
-                            spotifyUserIds: this.state.spotifyUserIds.concat(this.state.userIds),
-                            userIds: ""
-                        });
-                    }}>
-                        +
-                    </div>
-                    <div className="flex-div-center">
-                        {this.state.spotifyUserIds.map(user => {
-                            return (
-                                        <div className={"added-user-id user-name-tile hover-item"}>
-                                          {user}
-                                        </div>
-                                    )})
-                        }
+                <div className="instructions row"><b>Step One:</b> Enter a Spotify user ID to pull songs from their library</div>
+                <div className="row">
+                    <div className="flex-div user-id-input-container">
+                        <div className="flex-div-center">
+                            <div>User ID:</div>
+                                <input  value={this.state.userIds} onChange={(event) => {
+                                    this.setState({
+                                        userIds: event.target.value
+                                    })
+                                }}/>
+                            <div className="button plus-button" onClick={() => {
+                                this.setState({
+                                    spotifyUserIds: this.state.spotifyUserIds.concat(this.state.userIds),
+                                    userIds: ""
+                                });
+                            }}>
+                                +
+                            </div>
+                        </div>
+                        <div className="flex-div-center">
+                            {this.state.spotifyUserIds.map(user => {
+                                return (
+                                            <div className={"added-user-id user-name-tile hover-item"}>
+                                              {user}
+                                            </div>
+                                        )})
+                            }
+                        </div>
                     </div>
                 </div>
-                <div className="right-aligned-content">
+                <div className="right-aligned-content row">
                     <div className="button done-button" onClick={()=> {
                         this.setState({userFlowStep: this.flowState.TRACKLISTING})}}>
                         <RightArrow/>
@@ -234,25 +238,30 @@ class App extends Component {
         }
     }
 
-    loginConditionalContent() {
-        if (!this.state.loggedIn) return;
+    loginButton(){
         return (
-                <div>
-                    <Header/>
-                    <div className="body-content">
-                        {this.renderFlow()}
-                    </div>
-                </div>
-                );
+            <div className="login-container"><a href="http://localhost:8888/login" ><div className="button user-name-tile hover-item">Login to Spotify</div></a></div>
+        )
+    }
+
+    loginConditionalContent() {
+        if (!this.state.loggedIn){return this.loginButton();}
+        else{
+            return (
+                        <div className="body-content">
+                            {this.renderFlow()}
+                        </div>
+                    );
+        }
     }
 
 
     render() {
         return (
             <div className="App large-12 medium-12 small-12">
-        {!this.state.loggedIn && <a href="http://localhost:8888/login" > Login to Spotify </a>}
-        {this.loginConditionalContent()}
-      </div>
+                <Header/>
+                {this.loginConditionalContent()}
+            </div>
         );
     }
 }

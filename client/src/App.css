@@ -34,7 +34,8 @@ body {
 .header {
   border-bottom: 0.5px solid white;
   display: flex;
-  justify-content: space-between; }
+  justify-content: space-between;
+  min-height: 5rem; }
 
 .header h1, h4 {
   padding: 0 1rem; }
@@ -79,6 +80,10 @@ tr {
 .user-id-input-container {
   min-height: 5rem;
   flex-wrap: wrap; }
+  .user-id-input-container .added-user-id {
+    margin: 0.5rem; }
+  .user-id-input-container div {
+    height: fit-content; }
 
 .get-user-id-container, .created-container {
   border: 3px solid white;
@@ -88,9 +93,8 @@ tr {
   width: 100%;
   margin: auto; }
 
-.get-user-id-container div {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem; }
+.row {
+  padding: 0.5rem 0; }
 
 input {
   background: transparent;
@@ -150,3 +154,14 @@ input:focus {
 
 .cursor-pointer {
   cursor: pointer; }
+
+.login-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  height: calc(100vh - 5rem);
+  align-items: center; }
+  .login-container .button, .login-container a {
+    color: white;
+    height: fit-content;
+    text-decoration: none; }
