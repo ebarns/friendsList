@@ -66,6 +66,18 @@ button{
 .flex-div{
   display:flex;
 }
+
+.flex-justify-center{
+  display:flex;
+  justify-content: center;
+}
+
+.flex-ultimate-center{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
 table{margin:auto;}
 table tr td, th{
     text-align: left;
@@ -153,6 +165,44 @@ input:focus {
     fill: white;
 }
 .right-arrow-icon:hover{ fill: #1db954;}
+
+.up-arrow{
+  transform: rotate(-90deg);
+}
+.down-arrow{
+  transform: rotate(90deg);
+}
+
+.filter-container{
+  display:flex;
+  justify-content: space-around;
+  max-width: 70%;
+  margin:auto;
+}
+
+.sort-filters-container{
+  display:flex;
+  align-items:center;
+  justify-content: space-around;
+  .right-arrow-icon {
+    width: 1rem;
+    height: 1rem;
+
+  }
+
+  button {
+    border: 1px white solid;
+    border-radius: 2rem;
+    padding: 0.5rem 1rem;
+    min-width: 5rem;
+    min-height: 2.4rem;
+    background-color: transparent;
+    display:flex;
+    align-items:center;
+    color: white;
+    justify-content: center;
+  }
+}
 
 .user-name-tile { 
     border: 1px white solid;

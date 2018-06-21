@@ -1,5 +1,5 @@
 import React from "react";
-export default () => <svg className="right-arrow-icon" x="0px" y="0px"
+export default () => <svg className={"right-arrow-icon "}  x="0px" y="0px"
 	 viewBox="0 0 31.49 31.49" >
 <path d="M21.205,5.007c-0.429-0.444-1.143-0.444-1.587,0c-0.429,0.429-0.429,1.143,0,1.571l8.047,8.047H1.111
 	C0.492,14.626,0,15.118,0,15.737c0,0.619,0.492,1.127,1.111,1.127h26.554l-8.047,8.032c-0.429,0.444-0.429,1.159,0,1.587

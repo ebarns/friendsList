@@ -67,88 +67,43 @@ class App extends Component {
         return {
             "name": name,
             "description": "New playlist description",
-            "public": false
+            "public": true
         };
     }
 
     sortByType(sortType) {
-        return this.state.tracks.sort(function(a, b) {
-            return a.track[sortType] - b.track[sortType];
-        });
+        // let isAscending = this.state.isAscending ? 1 : -1
+        if(this.state.isAscending){
+            return this.state.tracks.sort(function(a, b) {
+                return (a.track[sortType] - b.track[sortType]);
+            })
+        }
+        else{
+            return this.state.tracks.sort(function(a, b) {
+                return (b.track[sortType] - a.track[sortType])
+            })
+        }
     }
 
     createPlaylistWithTracks() {
-        spotifyApi.createPlaylist("erik.barns", this.createPlayListConfig(this.state.playlistname))
-            .then(response => {
-                console.warn(response);
-                //ascending
-                // let sortType = this.state.selectedSort;
-                // let tracks = this.state.tracks.sort(function(a, b) {
-                //     return a.track[sortType] - b.track[sortType];
-                // });
-                // console.warn(tracks);
-                // let trackUris = tracks.map(item => item.track.uri).slice(0, this.state.trackLimit);
-                spotifyApi.addTracksToPlaylist("erik.barns", response.id, this.state.tracks)
-            })
-    }
-
-    renderFilters(){
-        return (
-            <div className="flex-div">
-                <div className="flex-div">
-                   <div> Limit </div><input value={this.state.trackLimit} onChange={(event) => {
-                this.setState({
-                    trackLimit: event.target.value
+        spotifyApi.getMe().then(response => {
+            let userId = response.id;
+            spotifyApi.createPlaylist(userId, this.createPlayListConfig(this.state.playlistname))
+                .then(response => {
+                    console.warn(response);
+                    //ascending
+                    // let sortType = this.state.selectedSort;
+                    // let tracks = this.state.tracks.sort(function(a, b) {
+                    //     return a.track[sortType] - b.track[sortType];
+                    // });
+                    // console.warn(tracks);
+                    // let trackUris = tracks.map(item => item.track.uri).slice(0, this.state.trackLimit);
+                    spotifyApi.addTracksToPlaylist("erik.barns", response.id, this.state.tracks)
                 })
-            }}/>
-                </div>
-                <div>
-                    sort by
-                    <select onChange={(event) => this.setState(
-                {
-                    selectedSort: event.target.value,
-                    tracks: this.sortByType(event.target.value)
-                })} name="cars">
-                    {this.state.sortOptions.map(item => {
-                return (
-                    <option>{item}</option>
-                );
-            })}
-                    </select>
-                </div>
-                <div>
-                  <button onClick={() => this.setState({
-                tracks: []
-            })}>
-                    Clear
-                  </button>
-                </div>
-                <div>
-            </div>
-            </div>
-        )
+        });
     }
 
-    shuffle(array) {
-        var currentIndex = array.length;
-        var temporaryValue;
-        var randomIndex;
 
-        // While there remain elements to shuffle...
-        while (0 !== currentIndex) {
-
-            // Pick a remaining element...
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex -= 1;
-
-            // And swap it with the current element.
-            temporaryValue = array[currentIndex];
-            array[currentIndex] = array[randomIndex];
-            array[randomIndex] = temporaryValue;
-        }
-
-        return array;
-    }
 
     renderUserIdInput(){
         return(
@@ -222,7 +177,7 @@ class App extends Component {
         return(
             <div className="created-container ">
                 <h4>{this.state.playlistname} was created successfully</h4>
-                <div className="button right-aligned-content flex-div-center text-with-arrow" onClick={()=>{this.setState({userFlowStep: this.flowState.GETUSERIDS})}}>Start over <RightArrow/></div>
+                <div className="button right-aligned-content flex-div-center text-with-arrow" onClick={()=>{this.setState({userFlowStep: this.flowState.GETUSERIDS,spotifyUserIds: [], userIds: ""})}}>Start over <RightArrow/></div>
             </div>
         );
     }
@@ -240,8 +195,44 @@ class App extends Component {
 
     loginButton(){
         return (
-            <div className="login-container"><a href="http://localhost:8888/login" ><div className="button user-name-tile hover-item">Login to Spotify</div></a></div>
+            <div className="login-container"><a onClick={this.login} ><div className="button user-name-tile hover-item">Login with Spotify</div></a></div>
         )
+    }
+
+    login(){
+        // Get the hash of the url
+        const hash = window.location.hash
+            .substring(1)
+            .split('&')
+            .reduce(function (initial, item) {
+              if (item) {
+                var parts = item.split('=');
+                initial[parts[0]] = decodeURIComponent(parts[1]);
+              }
+              return initial;
+            }, {});
+                // Set token
+        let _token = hash.access_token;
+
+        const authEndpoint = 'https://accounts.spotify.com/authorize';
+
+        // Replace with your app's client ID, redirect URI and desired scopes
+        const clientId = '56477a90cfa443eea4531564ed615908';
+        // const redirectUri = 'http://friendslist.surge.sh/';
+        const redirectUri = 'http://localhost:3000/callback';
+        const scopes = [
+          'user-read-birthdate',
+          'user-read-email',
+          'user-read-private',
+          'playlist-modify-public',
+          'playlist-modify',
+          'playlist-modify-private'
+        ];
+
+        // If there is no token, redirect to Spotify authorization
+        if (!_token) {
+          window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token`;
+        }
     }
 
     loginConditionalContent() {
