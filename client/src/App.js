@@ -147,21 +147,14 @@ class App extends Component {
             )
     }
 
-    renderCreated(){
-        return(
-            <div className="created-container ">
-                <h4>{this.state.playlistname} was created successfully</h4>
-                <div className="button right-aligned-content flex-div-center text-with-arrow" onClick={()=>{this.setState({userFlowStep: this.flowState.GETUSERIDS,spotifyUserIds: [], userIds: ""})}}>Start over <RightArrow/></div>
-            </div>
-        );
-    }
+
 
     renderFlow() {
         switch (this.state.userFlowStep) {
             case this.flowState.GETUSERIDS: return this.renderUserIdInput();
             case this.flowState.TRACKLISTING: return <TrackList spotifyUserIds={this.state.spotifyUserIds} trackLimit={this.state.trackLimit} onClickCallback={(playlist)=>this.setState({userFlowStep: this.flowState.NAMEPLAYLIST, tracks: playlist})}/>
             case this.flowState.NAMEPLAYLIST: return this.renderNamePlaylist();
-            case this.flowState.CREATED: return this.renderCreated();
+            case this.flowState.CREATED: return <Created name={this.state.playlistname} onClickCallback={()=>{this.setState({userFlowStep: this.flowState.GETUSERIDS,spotifyUserIds: [], userIds: ""})}}/>
             case this.flowState.HELP: return <HelpBox onClickCallback={() =>this.setState({userFlowStep: this.flowState.GETUSERIDS})}/>;
             default: return;
         }
@@ -176,6 +169,13 @@ class App extends Component {
         );
     }
 }
+
+const Created = (props) => (
+            <div className="created-container ">
+                <h4>{props.name} was created successfully</h4>
+                <div className="button right-aligned-content flex-div-center text-with-arrow" onClick={props.onClickCallback}>Start over <RightArrow/></div>
+            </div>
+    );
 
 class Login extends Component {
     login(){
