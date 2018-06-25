@@ -107,7 +107,7 @@ tr{
     }
 }
 
- .get-user-id-container, .created-container{
+ .get-user-id-container, .created-container, .content-container{
   border: 3px solid white;
   border-radius: 2rem;
   padding: 2rem;
@@ -147,6 +147,7 @@ input:focus {
 
 .button:hover{
   color: #1db954;
+  svg{fill: #1db954;}
 }
 
 .plus-button { font-size: 2rem; }
@@ -156,8 +157,10 @@ input:focus {
 }
 
 .right-aligned-content{
+  width:100%;
   display:flex;
   justify-content: flex-end;
+  div{margin-left: 0.5rem;}
 }
 .right-arrow-icon{
     width: 2rem;
@@ -171,6 +174,10 @@ input:focus {
 }
 .down-arrow{
   transform: rotate(90deg);
+}
+.left-arrow{
+  transform: rotate(180deg);
+  margin-right: 0.5rem;
 }
 
 .filter-container{
@@ -235,3 +242,19 @@ input:focus {
   }
 }
 
+.help-button{
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 2rem;
+  padding: 0;
+  border: solid white;
+  display: flex;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+}
+
+.help-question{
+  li { padding: 0.5rem;}
+  span { color: #1db954;}
+}

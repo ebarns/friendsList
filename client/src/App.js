@@ -25,8 +25,6 @@ class App extends Component {
                 name: 'Not Checked',
                 albumArt: ''
             },
-            sortOptions: this.getSortOptions(),
-            selectedSort: this.getSortOptions()[0],
             spotifyUserIds: [],
             trackLimit: 20,
             userFlowStep: 1
@@ -47,21 +45,6 @@ class App extends Component {
         return hashParams;
     }
 
-    getSortOptions() {
-        return ["popularity", "duration_ms"];
-    }
-
-    getNowPlaying() {
-        spotifyApi.getMyCurrentPlaybackState()
-            .then((response) => {
-                this.setState({
-                    nowPlaying: {
-                        name: response.item.name,
-                        albumArt: response.item.album.images[0].url
-                    }
-                });
-            })
-    }
 
     createPlayListConfig(name) {
         return {
@@ -71,35 +54,19 @@ class App extends Component {
         };
     }
 
-    sortByType(sortType) {
-        // let isAscending = this.state.isAscending ? 1 : -1
-        if(this.state.isAscending){
-            return this.state.tracks.sort(function(a, b) {
-                return (a.track[sortType] - b.track[sortType]);
-            })
-        }
-        else{
-            return this.state.tracks.sort(function(a, b) {
-                return (b.track[sortType] - a.track[sortType])
-            })
-        }
-    }
 
     createPlaylistWithTracks() {
         spotifyApi.getMe().then(response => {
             let userId = response.id;
             spotifyApi.createPlaylist(userId, this.createPlayListConfig(this.state.playlistname))
                 .then(response => {
-                    console.warn(response);
-                    //ascending
-                    // let sortType = this.state.selectedSort;
-                    // let tracks = this.state.tracks.sort(function(a, b) {
-                    //     return a.track[sortType] - b.track[sortType];
-                    // });
-                    // console.warn(tracks);
-                    // let trackUris = tracks.map(item => item.track.uri).slice(0, this.state.trackLimit);
-                    spotifyApi.addTracksToPlaylist("erik.barns", response.id, this.state.tracks)
-                })
+                    spotifyApi.addTracksToPlaylist(userId, response.id, this.state.tracks)
+                    this.setState({userFlowStep: this.flowState.CREATED});
+                }).catch(error => {
+                    alert("whoops, something went wrong. sorry :(");
+                });
+        }).catch(error =>{
+            console.error("whoops");
         });
     }
 
@@ -138,10 +105,18 @@ class App extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="right-aligned-content row">
-                    <div className="button done-button" onClick={()=> {
-                        this.setState({userFlowStep: this.flowState.TRACKLISTING})}}>
-                        <RightArrow/>
+                <div className={"flex-div"}>
+                    <div>
+                        <div className="button hover-item help-button" onClick={()=> {
+                            this.setState({userFlowStep: this.flowState.HELP})}}>
+                            ?
+                        </div>
+                    </div>
+                    <div className="right-aligned-content row">
+                        <div className="button done-button" onClick={()=> {
+                            this.setState({userFlowStep: this.flowState.TRACKLISTING})}}>
+                            <RightArrow/>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -164,7 +139,6 @@ class App extends Component {
                 <div className="right-aligned-content">
                     <div class="button done-button" onClick={() => {
                         this.createPlaylistWithTracks();
-                        this.setState({userFlowStep: this.flowState.CREATED});
                     }}>
                         <RightArrow/>
                     </div>
@@ -182,23 +156,28 @@ class App extends Component {
         );
     }
 
-
     renderFlow() {
         switch (this.state.userFlowStep) {
             case this.flowState.GETUSERIDS: return this.renderUserIdInput();
             case this.flowState.TRACKLISTING: return <TrackList spotifyUserIds={this.state.spotifyUserIds} trackLimit={this.state.trackLimit} onClickCallback={(playlist)=>this.setState({userFlowStep: this.flowState.NAMEPLAYLIST, tracks: playlist})}/>
             case this.flowState.NAMEPLAYLIST: return this.renderNamePlaylist();
             case this.flowState.CREATED: return this.renderCreated();
+            case this.flowState.HELP: return <HelpBox onClickCallback={() =>this.setState({userFlowStep: this.flowState.GETUSERIDS})}/>;
             default: return;
         }
     }
 
-    loginButton(){
+    render() {
         return (
-            <div className="login-container"><a onClick={this.login} ><div className="button user-name-tile hover-item">Login with Spotify</div></a></div>
-        )
+            <div className="App large-12 medium-12 small-12">
+                <Header/>
+                {!this.state.loggedIn ? <Login/> : (<div className={"body-content"}>{this.renderFlow()}</div>)}
+            </div>
+        );
     }
+}
 
+class Login extends Component {
     login(){
         // Get the hash of the url
         const hash = window.location.hash
@@ -235,26 +214,33 @@ class App extends Component {
         }
     }
 
-    loginConditionalContent() {
-        if (!this.state.loggedIn){return this.loginButton();}
-        else{
-            return (
-                        <div className="body-content">
-                            {this.renderFlow()}
-                        </div>
-                    );
-        }
-    }
-
-
-    render() {
+    render(){
         return (
-            <div className="App large-12 medium-12 small-12">
-                <Header/>
-                {this.loginConditionalContent()}
-            </div>
+            <div className="login-container"><a onClick={this.login} ><div className="button user-name-tile hover-item">Login with Spotify</div></a></div>
         );
     }
 }
+
+const HelpBox = (props) => (
+    <div className="content-container">
+        <div className="help-question">
+            <div><b>How Do I get someone's user ID?</b></div>
+            <div>
+                <ol>
+                    <li>Go to the users Spotify profile page</li>
+                    <li>Click on the "..." button, and select "Share" from the dropdown. Finally, select "Copy Profile Link" from the dropdown</li>
+                    <li>Paste the profile link anywhere (notepad, word, URL search bar)</li>
+                    <li>The text after "/user/" in the Profile Link is the users ID. <br/>(e.g. https://open.spotify.com/user/<span>erik.barns</span>?si=7AYjD67rQ7KdGw4ivVFQOA)
+                        <br/>In this case my user ID is erik.barns, but many user IDs might not be as readable. It's possible it will be a random collection of numbers and letters (e.g. 123399809)
+                    </li>
+                    <li>Now return to the home page and make a playlist with your friends Spotify user ID!</li>
+                </ol>
+            </div>
+        </div>
+        <div className="flex-div-center button" onClick={props.onClickCallback}>
+            <div className="left-arrow"><RightArrow/></div><div>Back</div>
+        </div>
+    </div>
+);
 
 export default App;
