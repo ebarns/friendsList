@@ -76,7 +76,7 @@ class App extends Component {
     renderUserIdInput(){
         return(
             <div className="get-user-id-container">
-                <div className="instructions row"><b>Step One:</b> Enter a Spotify user ID to pull songs from their library</div>
+                <div className="instructions row">Enter a Spotify user ID to pull songs from their library</div>
                 <div className="row">
                     <div className="flex-div user-id-input-container">
                         <div className="flex-div-center">
