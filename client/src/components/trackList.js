@@ -55,7 +55,7 @@ class TrackList extends Component {
             })
         }
     }
-    
+
     shuffle(array) {
         var currentIndex = array.length;
         var temporaryValue;
@@ -121,7 +121,7 @@ class TrackList extends Component {
     }
 
 	showAddOrRemove(index){
-        let td = (index < this.props.trackLimit) ? <td className="no-select cursor-pointer" onClick={() => this.removeTrack(index)}>x</td> : <td className="no-select cursor-pointer" onClick={() => this.pushTrackToTop(index)}>+</td>
+        let td = (index < this.state.trackLimit) ? <td className="no-select cursor-pointer" onClick={() => this.removeTrack(index)}>x</td> : <td className="no-select cursor-pointer" onClick={() => this.pushTrackToTop(index)}>+</td>
         return td;
     }
 
