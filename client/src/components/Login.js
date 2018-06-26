@@ -20,8 +20,8 @@ class Login extends Component {
 
         // Replace with your app's client ID, redirect URI and desired scopes
         const clientId = '56477a90cfa443eea4531564ed615908';
-        const redirectUri = 'http://friendslist.surge.sh/';
-        // const redirectUri = 'http://localhost:3000/callback';
+        // const redirectUri = 'http://friendslist.surge.sh/';
+        const redirectUri = 'http://localhost:3000/callback';
         const scopes = [
           'user-read-birthdate',
           'user-read-email',

@@ -55,7 +55,8 @@ button {
 
 .flex-div-center {
   display: flex;
-  align-items: center; }
+  align-items: center;
+  flex-wrap: wrap; }
 
 .flex-div {
   display: flex; }
@@ -170,8 +171,9 @@ input:focus {
 
 .sort-filters-container {
   display: flex;
-  align-items: center;
-  justify-content: space-around; }
+  align-items: center; }
+  .sort-filters-container button {
+    margin: 0 0.5rem; }
   .sort-filters-container .right-arrow-icon {
     width: 1rem;
     height: 1rem; }
@@ -179,7 +181,7 @@ input:focus {
     border: 1px white solid;
     border-radius: 2rem;
     padding: 0.5rem 1rem;
-    min-width: 5rem;
+    min-width: 8rem;
     min-height: 2.4rem;
     background-color: transparent;
     display: flex;

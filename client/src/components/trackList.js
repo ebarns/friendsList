@@ -9,7 +9,7 @@ class TrackList extends Component {
 
 		this.state = {
 			tracks : this.props.tracks || [],
-            trackLimit: 20,
+            trackLimit: 15,
             sortOptions: this.getSortOptions(),
             selectedSort: this.getSortOptions()[0],
             isAscending: true
@@ -103,13 +103,6 @@ class TrackList extends Component {
                         );
                     })}
                 </div>
-                <div className="sort-filters-container filter">
-                  <button onClick={() => this.setState({
-                tracks: this.shuffle(this.state.tracks)
-                    })}>
-                    Shuffle
-                  </button>
-                </div>
                 <div>
             </div>
             </div>
@@ -155,10 +148,25 @@ class TrackList extends Component {
         )
     }
 
+    analyzePlaylist(){
+        let tracks = this.state.tracks.slice(0,this.state.trackLimit).map(track => track.track.id);
+        spotifyApi.getAudioFeaturesForTracks(tracks).then(response => {
+            console.warn(response);
+        }).catch(error => console.error(error));
+    }
+
 	render(){
 		return(
 			    <div>
-		            <div className="right-aligned-content">
+		            <div className="right-aligned-content flex-div-center">
+                        <div className="flex-div-center button"  onClick={() => this.setState({tracks: this.shuffle(this.state.tracks)})}>
+                            Shuffle
+                        </div>
+                        <div> | </div>
+                        <div className="flex-div-center button" onClick={()=>{this.analyzePlaylist()}}>
+                            Analyze Playlist
+                        </div>
+                        <div> | </div>
 		                <div className="text-with-arrow flex-div-center button" onClick={() => this.props.onClickCallback(this.state.tracks.map(item => item.track.uri).slice(0, this.props.trackLimit))}>
 		                      Create playlist <RightArrow/>
 		                </div>
